@@ -1,0 +1,19 @@
+# --- 构建阶段：装全部依赖并编译 TypeScript ---
+FROM node:24-alpine AS build
+WORKDIR /app
+COPY api/package*.json ./
+RUN npm install
+COPY api/ ./
+RUN npm run build
+
+# --- 运行阶段：只保留生产依赖和编译产物 ---
+# 分两阶段是为了让最终镜像不包含 TypeScript 编译器和源码，
+# 体积能小一半以上。
+FROM node:24-alpine
+WORKDIR /app
+ENV NODE_ENV=production
+COPY api/package*.json ./
+RUN npm install --omit=dev && npm cache clean --force
+COPY --from=build /app/dist ./dist
+EXPOSE 3000
+CMD ["node", "dist/index.js"]

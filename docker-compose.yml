@@ -1,0 +1,33 @@
+  services:
+    # Caddy：对外唯一入口。提供前端静态文件，把 /api 转给后端。
+    web:
+      build:
+        context: .
+        dockerfile: Dockerfile.web
+      restart: unless-stopped
+      depends_on:
+        - api
+      mem_limit: 256m
+
+    # 后端 API
+    api:
+      build:
+        context: .
+        dockerfile: Dockerfile.api
+      environment:
+        NODE_ENV: production
+        PORT: 3000
+      restart: unless-stopped
+      mem_limit: 512m
+
+    # Cloudflare Tunnel：主动向 Cloudflare 建立出站长连接。
+    # 因为有它，这台机器一个入站端口都不用开。
+    cloudflared:
+      image: cloudflare/cloudflared:latest
+      command: tunnel --no-autoupdate run
+      environment:
+        TUNNEL_TOKEN: ${TUNNEL_TOKEN}
+      restart: unless-stopped
+      depends_on:
+        - web
+      mem_limit: 128m

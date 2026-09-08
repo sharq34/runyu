@@ -1,0 +1,18 @@
+# 只监听 80 端口的纯 HTTP。
+# TLS 由 Cloudflare 在边缘终止，Tunnel 到这里走的是内网，不需要证书。
+:80 {
+	root * /srv
+
+	# /api/* 转给后端容器。api 是 compose 里的服务名，
+	# Docker 内置 DNS 会把它解析成容器 IP。
+	handle /api/* {
+		reverse_proxy api:3000
+	}
+
+	# 其余全部交给前端。找不到文件就回 index.html，
+	# 这样前端路由（/about 之类）刷新页面不会 404。
+	handle {
+		try_files {path} /index.html
+		file_server
+	}
+}

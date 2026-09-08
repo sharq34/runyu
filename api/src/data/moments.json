@@ -1,0 +1,26 @@
+[
+  {
+    "id": "first",
+    "date": "2026-01-01",
+    "title": "标题写在这里",
+    "summary": "一句话摘要，显示在列表上。",
+    "body": "展开后显示的正文。可以写长一点。\n\n换行用 \\n\\n 分段。",
+    "image": null
+  },
+  {
+    "id": "second",
+    "date": "2026-02-14",
+    "title": "第二条",
+    "summary": "改这个 JSON 文件就能改网站内容，不用动代码。",
+    "body": "图片放到 web/public/images/ 目录，然后把 image 字段填成 \"/images/文件名.jpg\"。",
+    "image": null
+  },
+  {
+    "id": "third",
+    "date": "2026-06-30",
+    "title": "第三条",
+    "summary": "现在没有数据库，内容来自这个文件。",
+    "body": "等需要在网页上编辑内容时，再加 Postgres。届时这个文件会被数据库表替代。",
+    "image": null
+  }
+]

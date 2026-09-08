@@ -1,0 +1,15 @@
+# --- 构建阶段：编译前端静态文件 ---
+FROM node:24-alpine AS build
+WORKDIR /app
+COPY web/package*.json ./
+RUN npm install
+COPY web/ ./
+RUN npm run build
+
+# --- 运行阶段：Caddy 同时做静态文件服务和 /api 反向代理 ---
+# 前端产物直接烤进 Caddy 镜像，所以整个站只需要这一个容器对外，
+# 不用额外跑一个 nginx。
+FROM caddy:2-alpine
+COPY --from=build /app/dist /srv
+COPY Caddyfile /etc/caddy/Caddyfile
+EXPOSE 80
