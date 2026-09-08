@@ -20,8 +20,9 @@
 
 ```
 web/                  前端
-  src/App.tsx         主组件
-  public/images/      静态图片，通过 /images/xxx.jpg 访问
+  src/App.tsx         主组件（照片墙整页）
+  src/photos.ts       照片数据：文件名、说明、章节、宽高比
+  public/images/      静态图片，通过 /images/xxx.jpg 访问；README.md 里有文件名对照表
 api/                  后端
   src/index.ts        全部路由
   src/data/moments.json  内容数据
@@ -69,8 +70,19 @@ docker-compose.yml
 
 ## 设计
 
-前端目前是验证用的占位样式，**不是最终设计**，可以整体推翻重做。
-方向未定，需要先和用户确认网站的具体内容和风格。
+主题「绣球」：纸色底、绣球粉 / 绣球蓝紫、叶绿、一点金；标题用衬线（Cormorant Garamond + Noto Serif SC，
+国内加载不到时回退系统宋体），正文无衬线。主题色在 `web/src/index.css` 的 `@theme` 里。
+
+页面结构：首页（抱花束那张做全屏背景，手机上脸在上文字在下、桌面上她在右文字在左；
+文案「在一起 · 第 N 天」+ 时分秒每秒跳动 + 年月日拆分 + 总秒数）
+→ 照片墙（规整网格，电脑 4 列、手机 2 列；悬停放大并展开"照片背后的故事"，手机上点开灯箱看故事）→ 页脚。
+用户明确不要便签 / 拍立得那种不规则风格，也不要"送花"之类的互动按钮。先只放 8 张。
+
+网格的高度用 padding 撑（竖格 125%），横屏照片 `wide: true` 跨两列、高度用 calc 对齐；`focus` 控制裁切位置。
+
+照片墙目前不走后端，数据在 `web/src/photos.ts`。图片文件还没放进来，页面用带说明的占位块代替，
+文件放到 `web/public/images/` 后自动显示。`App.tsx` 顶部的 `HER_NAME` 是待确认的占位值；`MET_AT` 是认识的时刻，目前只有日期，按当天 0 点算。
+每张照片的 `caption` / `story` 是 AI 生成的占位文案，需要用户改成真实故事。首页背景文件是 `hero.jpg`。
 
 ## 尚未决定 / 待办
 

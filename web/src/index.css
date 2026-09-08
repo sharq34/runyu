@@ -1,1 +1,80 @@
 @import "tailwindcss";
+
+/* ───────────────────────────────────────────────
+   主题：绣球 (Hydrangea)
+   纸色底、绣球粉 / 绣球蓝紫、叶绿、一点金。
+   ─────────────────────────────────────────────── */
+@theme {
+  --color-paper: #fbf8f3;
+  --color-paper-deep: #f3ece3;
+  --color-ink: #2e2a33;
+  --color-ink-soft: #6f6876;
+  --color-ink-mute: #a49daa;
+
+  --color-petal: #f2c4d2;
+  --color-petal-deep: #e39bb5;
+  --color-bloom: #bcc8ec;
+  --color-bloom-deep: #8d9dd8;
+  --color-leaf: #a9bfab;
+  --color-leaf-deep: #7f9c83;
+  --color-sand: #e9d8b8;
+  --color-gold: #c8a465;
+
+  --font-display: "Cormorant Garamond", "Noto Serif SC", "Songti SC", "STSong", "SimSun", Georgia, serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+
+  --shadow-card: 0 1px 2px rgb(46 42 51 / 0.06), 0 14px 32px -14px rgb(46 42 51 / 0.22);
+  --shadow-lift: 0 2px 4px rgb(46 42 51 / 0.08), 0 30px 50px -18px rgb(46 42 51 / 0.32);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 纸面上淡淡的两团颜色 */
+.paper-glow {
+  background:
+    radial-gradient(60vw 60vw at 85% -10%, rgb(242 196 210 / 0.35), transparent 60%),
+    radial-gradient(50vw 50vw at -10% 60%, rgb(188 200 236 / 0.35), transparent 60%),
+    radial-gradient(40vw 40vw at 70% 110%, rgb(169 191 171 / 0.22), transparent 60%);
+}
+
+/* 占位块（图片还没放进来时） */
+.ph-petal { background-image: linear-gradient(160deg, #f6d3dd, #e5a7bf); }
+.ph-bloom { background-image: linear-gradient(160deg, #c9d3f0, #97a6dd); }
+.ph-leaf  { background-image: linear-gradient(160deg, #bfd0c0, #86a38a); }
+.ph-sand  { background-image: linear-gradient(160deg, #efe1c6, #d1b98a); }
+.ph-ink   { background-image: linear-gradient(160deg, #5e5866, #2e2a33); }
+
+/* 飘落的绣球小花 */
+@keyframes drift {
+  from { transform: translate3d(0, -8vh, 0) rotate(0deg); }
+  to   { transform: translate3d(var(--sway, 40px), 108vh, 0) rotate(420deg); }
+}
+
+/* 「送她一束绣球」时炸开的小花 */
+@keyframes rise {
+  0%   { transform: translate(-50%, -50%) scale(0.4); opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.15) rotate(var(--rot)); opacity: 0; }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+.fade-up { animation: fade-up 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .fade-up { animation: none; }
+}
